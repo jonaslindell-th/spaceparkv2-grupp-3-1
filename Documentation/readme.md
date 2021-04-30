@@ -23,4 +23,5 @@ När man startar applikationen får man 2 val
 * Admin
 
 Om man väljer user kommer man till att fylla i sitt namn så man blir validerad om man är en karaktär eller ej.
-Om mn väljer admin får man logga in.
+
+Om man väljer admin får man logga in.
