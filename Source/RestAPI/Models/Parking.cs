@@ -8,7 +8,7 @@ namespace RestAPI.Models
     public class Parking
     {
         public int Id { get; set; }
-        public Size SizeId { get; set; }
+        public Size Size { get; set; }
         public string CharacterName { get; set; }
         public string SpaceshipName { get; set; }
         public DateTime Arrival { get; set; }

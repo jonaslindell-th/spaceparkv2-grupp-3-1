@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using RestAPI.Data;
 
 namespace RestAPI
 {
@@ -28,6 +30,8 @@ namespace RestAPI
         {
 
             services.AddControllers();
+            services.AddDbContext<SpaceParkDbContext>(option => option.UseSqlServer(@"Data Source=DESKTOP-AI55B02\SQLEXPRESS;Initial Catalog=Space Park;Integrated Security = True"));
+            //services.AddDbContext<SpaceParkDbContext>(option => option.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Space Park;Integrated Security = True"));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RestAPI", Version = "v1" });
