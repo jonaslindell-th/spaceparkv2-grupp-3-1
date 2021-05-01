@@ -42,15 +42,17 @@ namespace RestAPI.Controllers
         public IActionResult Post([FromBody] Parking parking)
         {
             parking.Arrival = DateTime.Now;
+            parking.CharacterName = "";
+            parking.SpaceshipName = "";
             try
             {
                 _dbContext.Parkings.Add(parking);
                 _dbContext.SaveChanges();
                 return StatusCode(StatusCodes.Status200OK, "Parking Added to Database.");
             }
-            catch (Exception e)
+            catch
             {
-                return StatusCode(StatusCodes.Status409Conflict, e);
+                return StatusCode(StatusCodes.Status409Conflict, "An error occurred while adding new parking spot.");
             }
         }
 

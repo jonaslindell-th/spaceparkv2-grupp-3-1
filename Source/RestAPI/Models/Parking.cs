@@ -13,7 +13,7 @@ namespace RestAPI.Models
         public int SpaceParkId { get; set; }
         public string CharacterName { get; set; }
         public string SpaceshipName { get; set; }
-        public DateTime Arrival { get; set; }
+        public DateTime? Arrival { get; set; }
     }
 
 }
