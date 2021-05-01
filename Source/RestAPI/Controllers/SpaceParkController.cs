@@ -16,9 +16,9 @@ namespace RestAPI.Controllers
     {
         // GET: api/<SpaceParkController>
         [HttpGet]
-        public IActionResult Get([FromBody] People person)
+        public IActionResult Get([FromBody] string name)
         {
-            var isValid = Validate.Person(person.Name);
+            var isValid = Validate.Person(name);
             if (isValid.Result)
             {
              return StatusCode(StatusCodes.Status200OK, "Person Validated");
