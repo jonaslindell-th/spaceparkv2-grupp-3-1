@@ -41,7 +41,6 @@ namespace RestAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Parking parking)
         {
-            parking.Arrival = DateTime.Now;
             parking.CharacterName = "";
             parking.SpaceshipName = "";
             try
@@ -64,8 +63,19 @@ namespace RestAPI.Controllers
 
         // DELETE api/<ManageParkingsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            var parking = _dbContext.Parkings.FirstOrDefault(p => p.Id == id);
+            if (parking != null)
+            {
+                _dbContext.Parkings.Remove(parking);
+                _dbContext.SaveChanges();
+                return StatusCode(StatusCodes.Status200OK, $"Parking with id:{parking.Id} was removed successfully.");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound, "Parking not found.");
+            }
         }
     }
 }
