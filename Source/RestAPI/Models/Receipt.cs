@@ -10,6 +10,7 @@ namespace RestAPI.Models
     {
         public int Id { get; set; }
         public Size Size { get; set; }
+        public int SizeId { get; set; }
         public string Name { get; set; }
         public string StarshipName { get; set; }
         public DateTime Arrival { get; set; }
