@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RestAPI.Controllers
 {
-    [Route("api/SpacePark/park/[controller]")]
+    [Route("park/[controller]")]
     [ApiController]
     public class ParkController : ControllerBase
     {
