@@ -31,7 +31,7 @@ namespace RestAPI
 
             services.AddControllers();
             //services.AddDbContext<SpaceParkDbContext>(option => option.UseSqlServer(@"Data Source=DESKTOP-AI55B02\SQLEXPRESS;Initial Catalog=Space Park;Integrated Security = True"));
-            services.AddDbContext<SpaceParkDbContext>(option => option.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Space Park;Integrated Security = True"));
+            services.AddDbContext<SpaceParkDbContext>(option => option.UseSqlServer(@"Server=localhost,41433;Database=SpaceParkVersionTwo;User ID=sa; Password=verystrong!pass321"));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RestAPI", Version = "v1" });
