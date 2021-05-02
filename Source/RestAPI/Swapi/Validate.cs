@@ -21,8 +21,8 @@ namespace RestAPI.Swapi
             var client = new RestClient("https://swapi.dev/api/");
             var request = new RestRequest($"starships/?search={input}", DataFormat.Json); // Use the swAPI search function with the user input string.
             var starshipResponse = await client.GetAsync<StarshipResponse>(request); // Add the results from the search to the PeopleResponse List
-            var person = starshipResponse.Results.Find(p => p.Name.ToLower() == input.ToLower());
-            return person != null;
+            var starship = starshipResponse.Results.Find(p => p.Name.ToLower() == input.ToLower());
+            return starship != null;
         }
     }
 }
