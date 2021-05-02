@@ -48,8 +48,9 @@ namespace RestAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] ParkRequest request)
         {
-            var isValid = Validate.Person(request.PersonName);
-            if (isValid.Result)
+            var validPerson = Validate.Person(request.PersonName);
+            var validShip = Validate.Starship(request.ShipName);
+            if (validPerson.Result && validShip.Result)
             {
                 var foundParking = _dbContext.Parkings.FirstOrDefault(p => p.Id == id);
                 if (foundParking != null)
