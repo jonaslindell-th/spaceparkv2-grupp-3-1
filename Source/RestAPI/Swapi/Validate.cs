@@ -16,13 +16,13 @@ namespace RestAPI.Swapi
             var person = peopleResponse.Results.Find(p => p.Name.ToLower() == input.ToLower());
             return person != null;
         }   
-        public static async Task<bool> Starship(string input)
+        public static async Task<Starship> Starship(string input)
         {
             var client = new RestClient("https://swapi.dev/api/");
             var request = new RestRequest($"starships/?search={input}", DataFormat.Json); // Use the swAPI search function with the user input string.
             var starshipResponse = await client.GetAsync<StarshipResponse>(request); // Add the results from the search to the PeopleResponse List
             var starship = starshipResponse.Results.Find(p => p.Name.ToLower() == input.ToLower());
-            return starship != null;
+            return starship;
         }
     }
 }

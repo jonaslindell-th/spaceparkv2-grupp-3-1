@@ -50,7 +50,7 @@ namespace RestAPI.Controllers
         {
             var validPerson = Validate.Person(request.PersonName);
             var validShip = Validate.Starship(request.ShipName);
-            if (validPerson.Result && validShip.Result)
+            if (validPerson.Result && validShip.Result != null)
             {
                 var foundParking = _dbContext.Parkings.FirstOrDefault(p => p.Id == id);
                 if (foundParking != null)
@@ -93,10 +93,10 @@ namespace RestAPI.Controllers
                         join s in _dbContext.Sizes
                             on p.SizeId equals s.Id
                         where p.SizeId == foundParking.SizeId
-                        select new Size()
+                        select new
                         {
-                            Id = s.Id,
-                            Type = s.Type
+                            s.Id,
+                            s.Type
                         }).FirstOrDefault();
 
                     double diff = (receipt.Departure - receipt.Arrival).TotalMinutes;
