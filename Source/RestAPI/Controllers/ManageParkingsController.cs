@@ -37,23 +37,23 @@ namespace RestAPI.Controllers
             return "value";
         }
 
-        // POST api/<ManageParkingsController>
-        [HttpPost]
-        public IActionResult Post([FromBody] Parking parking)
-        {
-            parking.CharacterName = "";
-            parking.SpaceshipName = "";
-            try
-            {
-                _dbContext.Parkings.Add(parking);
-                _dbContext.SaveChanges();
-                return StatusCode(StatusCodes.Status200OK, "Parking Added to Database.");
-            }
-            catch
-            {
-                return StatusCode(StatusCodes.Status409Conflict, "An error occurred while adding new parking spot.");
-            }
-        }
+        //// POST api/<ManageParkingsController>
+        //[HttpPost]
+        //public IActionResult Post([FromBody] Parking parking)
+        //{
+        //    parking.CharacterName = "";
+        //    parking.SpaceshipName = "";
+        //    try
+        //    {
+        //        _dbContext.Parkings.Add(parking);
+        //        _dbContext.SaveChanges();
+        //        return StatusCode(StatusCodes.Status200OK, "Parking Added to Database.");
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(StatusCodes.Status409Conflict, "An error occurred while adding new parking spot.");
+        //    }
+        //}
 
         // PUT api/<ManageParkingsController>/5
         [HttpPut("{id}")]
