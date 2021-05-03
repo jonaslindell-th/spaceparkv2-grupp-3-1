@@ -15,15 +15,17 @@ namespace RestAPI.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class SpaceParkController : ControllerBase
+    public class SpacePortController : ControllerBase
     {
         private SpaceParkDbContext _dbContext;
         private IReceipt _receipt;
+        private IDbFind _dbFind;
 
-        public SpaceParkController(SpaceParkDbContext dbContext, IReceipt receipt)
+        public SpacePortController(SpaceParkDbContext dbContext, IReceipt receipt, IDbFind dbFind)
         {
             _dbContext = dbContext;
             _receipt = receipt;
+            _dbFind = dbFind;
         }
 
         // GET: api/<SpaceParkController>
@@ -47,14 +49,20 @@ namespace RestAPI.Controllers
         }
 
         // PUT api/<SpaceParkController>/5
-        [HttpPut("[action]/{id}")]
+        [HttpPut("[action]")]
         public IActionResult Park(int id, [FromBody] ParkRequest request)
         {
             var validPerson = Validate.Person(request.PersonName);
             var validShip = Validate.Starship(request.ShipName);
+            //TODO: Tryparse
+            var length = double.Parse(validShip.Result.Length);
+
+            var parkingId = _dbFind.VacantParking(length, _dbContext);
+
             if (validPerson.Result && validShip.Result != null)
             {
-                var foundParking = _dbContext.Parkings.FirstOrDefault(p => p.Id == id);
+                //TODO: In Vacant parking?
+                var foundParking = _dbContext.Parkings.FirstOrDefault(p => p.Id == parkingId);
                 if (foundParking != null)
                 {
                     foundParking.Arrival = DateTime.Now;
@@ -65,6 +73,7 @@ namespace RestAPI.Controllers
                 }
                 else
                 {
+                    //TODO: Correct status code
                     return StatusCode(StatusCodes.Status404NotFound, "Parking was not found.");
                 }
             }
@@ -83,8 +92,6 @@ namespace RestAPI.Controllers
             {
                 if (foundParking.CharacterName == request.PersonName && foundParking.SpaceshipName == request.ShipName)
                 {
-
-                    //Receipt receipt = new Receipt();
                     _receipt.Name = foundParking.CharacterName;
                     _receipt.Arrival = (DateTime) foundParking.Arrival;
                     _receipt.StarshipName = foundParking.SpaceshipName;
