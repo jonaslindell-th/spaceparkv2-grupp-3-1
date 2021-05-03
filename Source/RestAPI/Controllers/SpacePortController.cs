@@ -98,6 +98,7 @@ namespace RestAPI.Controllers
                     _receipt.Departure = DateTime.Now;
                     _receipt.SizeId = foundParking.SizeId;
 
+                    //TODO: DbQueries.GetSize()
                     var size = (from p in _dbContext.Parkings
                         join s in _dbContext.Sizes
                             on p.SizeId equals s.Id
@@ -110,6 +111,8 @@ namespace RestAPI.Controllers
 
                     double diff = (_receipt.Departure - _receipt.Arrival).TotalMinutes;
                     double price = 0;
+
+                    //TODO: Switch expression c# 9.0 in new method CalculatePrice()
                     // Then calculate the minute price of parkingize times the amount of minutes + the starting fee.
                     if (size.Type == ParkingSize.Small)
                     {
