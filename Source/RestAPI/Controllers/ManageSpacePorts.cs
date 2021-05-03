@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using RestAPI.Data;
 using RestAPI.Models;
 
@@ -29,22 +30,7 @@ namespace RestAPI.Controllers
         [HttpGet]
         public ICollection<SpacePort> Get()
         {
-            var spacePorts = _dbContext.SpacePorts.ToList();
-            foreach (var port in spacePorts)
-            {
-                port.Parkings = (from sp in _dbContext.SpacePorts
-                    join p in _dbContext.Parkings
-                        on sp.Id equals p.SpacePortId
-                    select new Parking()
-                    {
-                        Id = p.Id,
-                        SizeId = p.SizeId,
-                        CharacterName = p.CharacterName,
-                        SpaceshipName = p.SpaceshipName,
-                        Arrival = p.Arrival,
-                        SpacePortId = p.SpacePortId
-                    }).ToList();
-            }
+            var spacePorts = _dbContext.SpacePorts.Include("Parkings").ToList();
             return spacePorts;
         }
 
