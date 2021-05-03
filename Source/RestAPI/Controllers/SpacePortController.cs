@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -49,38 +50,57 @@ namespace RestAPI.Controllers
         }
 
         // PUT api/<SpaceParkController>/5
-        [HttpPut("[action]")]
+        [HttpPut("[action]/{id}")]
         public IActionResult Park(int id, [FromBody] ParkRequest request)
         {
-            var validPerson = Validate.Person(request.PersonName);
-            var validShip = Validate.Starship(request.ShipName);
-            //TODO: Tryparse
-            var length = double.Parse(validShip.Result.Length);
-
-            var parkingId = _dbFind.VacantParking(length, _dbContext);
-
-            if (validPerson.Result && validShip.Result != null)
-            {
-                //TODO: In Vacant parking?
-                var foundParking = _dbContext.Parkings.FirstOrDefault(p => p.Id == parkingId);
-                if (foundParking != null)
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+            var parkings = (from sp in _dbContext.SpacePorts
+                join p in _dbContext.Parkings
+                    on sp.Id equals p.SpacePortId
+                where p.SpacePortId == id && p.CharacterName == null
+                select new Parking()
                 {
-                    foundParking.Arrival = DateTime.Now;
-                    foundParking.CharacterName = request.PersonName;
-                    foundParking.SpaceshipName = request.ShipName;
-                    _dbContext.SaveChanges();
-                    return StatusCode(StatusCodes.Status200OK, "Vehicle parked.");
+                    Id = p.Id,
+                    SizeId = p.SizeId,
+                    CharacterName = p.CharacterName,
+                    SpaceshipName = p.SpaceshipName,
+                    Arrival = p.Arrival,
+                    SpacePortId = p.SpacePortId
+                }).ToList();
+
+            if (parkings.Count > 0)
+            {
+                var validPerson = Validate.Person(request.PersonName);
+                var validShip = Validate.Starship(request.ShipName);
+                //TODO: Tryparse
+                var length = double.Parse(validShip.Result.Length);
+
+                var parkingId = _dbFind.VacantParking(length, _dbContext);
+
+                if (validPerson.Result && validShip.Result != null)
+                {
+                    //TODO: In Vacant parking?
+                    var foundParking = _dbContext.Parkings.FirstOrDefault(p => p.Id == parkingId);
+                    if (foundParking != null)
+                    {
+                        foundParking.Arrival = DateTime.Now;
+                        foundParking.CharacterName = request.PersonName;
+                        foundParking.SpaceshipName = request.ShipName;
+                        _dbContext.SaveChanges();
+                        return StatusCode(StatusCodes.Status200OK, "Vehicle parked.");
+                    }
+                    else
+                    {
+                        //TODO: Correct status code
+                        return StatusCode(StatusCodes.Status404NotFound, "Parking was not found.");
+                    }
                 }
                 else
                 {
-                    //TODO: Correct status code
-                    return StatusCode(StatusCodes.Status404NotFound, "Parking was not found.");
+                    return StatusCode(StatusCodes.Status401Unauthorized, "Not a valid character or ship");
                 }
             }
-            else
-            {
-                return StatusCode(StatusCodes.Status401Unauthorized, "Not a valid character or ship");
-            }
+            return StatusCode(StatusCodes.Status423Locked, "SpacePort is full");
         }
 
         // PUT api/<SpaceParkController>/5
