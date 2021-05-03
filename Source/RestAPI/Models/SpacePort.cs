@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RestAPI.Models
 {
-    public class SpacePort
+    public class SpacePort : ISpacePort
     {
         public int Id { get; set; }
         public string Name { get; set; }
