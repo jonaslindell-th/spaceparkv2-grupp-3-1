@@ -17,6 +17,6 @@ namespace RestAPI.Data
         public DbSet<Parking> Parkings { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
         public DbSet<Size> Sizes { get; set; }
-        public DbSet<SpacePark> SpaceParks { get; set; }
+        public DbSet<SpacePort> SpacePorts { get; set; }
     }
 }

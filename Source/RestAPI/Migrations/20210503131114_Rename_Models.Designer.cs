@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestAPI.Data;
 
 namespace RestAPI.Migrations
 {
     [DbContext(typeof(SpaceParkDbContext))]
-    partial class SpaceParkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210503131114_Rename_Models")]
+    partial class Rename_Models
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,7 +111,7 @@ namespace RestAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SpacePorts");
+                    b.ToTable("SpaceParks");
                 });
 
             modelBuilder.Entity("RestAPI.Models.Parking", b =>

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RestAPI.Models
+namespace RestAPI.Swapi
 {
-    public class SpacePark
+    public class Person
     {
-        public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Parking> Parkings { get; set; }
+        public List<string> StarShips { get; set; }
     }
 }

@@ -7,6 +7,6 @@ namespace RestAPI.Swapi
 {
     public class PeopleResponse
     {
-        public List<People> Results { get; set; }
+        public List<Person> Results { get; set; }
     }
 }
