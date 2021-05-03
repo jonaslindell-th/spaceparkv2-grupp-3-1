@@ -18,10 +18,12 @@ namespace RestAPI.Controllers
     public class SpaceParkController : ControllerBase
     {
         private SpaceParkDbContext _dbContext;
+        private IReceipt _receipt;
 
-        public SpaceParkController(SpaceParkDbContext dbContext)
+        public SpaceParkController(SpaceParkDbContext dbContext, IReceipt receipt)
         {
             _dbContext = dbContext;
+            _receipt = receipt;
         }
 
         // GET: api/<SpaceParkController>
@@ -82,12 +84,12 @@ namespace RestAPI.Controllers
                 if (foundParking.CharacterName == request.PersonName && foundParking.SpaceshipName == request.ShipName)
                 {
 
-                    Receipt receipt = new Receipt();
-                    receipt.Name = foundParking.CharacterName;
-                    receipt.Arrival = (DateTime) foundParking.Arrival;
-                    receipt.StarshipName = foundParking.SpaceshipName;
-                    receipt.Departure = DateTime.Now;
-                    receipt.SizeId = foundParking.SizeId;
+                    //Receipt receipt = new Receipt();
+                    _receipt.Name = foundParking.CharacterName;
+                    _receipt.Arrival = (DateTime) foundParking.Arrival;
+                    _receipt.StarshipName = foundParking.SpaceshipName;
+                    _receipt.Departure = DateTime.Now;
+                    _receipt.SizeId = foundParking.SizeId;
 
                     var size = (from p in _dbContext.Parkings
                         join s in _dbContext.Sizes
@@ -99,7 +101,7 @@ namespace RestAPI.Controllers
                             s.Type
                         }).FirstOrDefault();
 
-                    double diff = (receipt.Departure - receipt.Arrival).TotalMinutes;
+                    double diff = (_receipt.Departure - _receipt.Arrival).TotalMinutes;
                     double price = 0;
                     // Then calculate the minute price of parkingize times the amount of minutes + the starting fee.
                     if (size.Type == ParkingSize.Small)
@@ -119,9 +121,9 @@ namespace RestAPI.Controllers
                         price = (Math.Round(diff, 0) * 12000) + 6000;
                     }
 
-                    receipt.TotalAmount = price;
+                    _receipt.TotalAmount = price;
 
-                    _dbContext.Receipts.Add(receipt);
+                    _dbContext.Receipts.Add((Receipt)_receipt);
 
 
                     foundParking.Arrival = null;

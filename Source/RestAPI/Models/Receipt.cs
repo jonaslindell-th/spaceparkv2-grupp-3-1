@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RestAPI.Models
 {
-    public class Receipt
+    public class Receipt : IReceipt
     {
         public int Id { get; set; }
         public Size Size { get; set; }

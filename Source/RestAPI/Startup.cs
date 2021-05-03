@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RestAPI.Data;
+using RestAPI.Models;
 
 namespace RestAPI
 {
@@ -28,9 +29,8 @@ namespace RestAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
-            //services.AddDbContext<SpaceParkDbContext>(option => option.UseSqlServer(@"Data Source=DESKTOP-AI55B02\SQLEXPRESS;Initial Catalog=Space Park;Integrated Security = True"));
+            services.AddSingleton<IReceipt, Receipt>(); // Everytime someone request IReceipt service then create an instance of Receipt and inject that instace
             services.AddDbContext<SpaceParkDbContext>(option => option.UseSqlServer(@"Server=localhost,41433;Database=SpaceParkData;User ID=sa; Password=verystrong!pass321"));
             services.AddSwaggerGen(c =>
             {
