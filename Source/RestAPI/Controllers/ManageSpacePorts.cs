@@ -75,7 +75,7 @@ namespace RestAPI.Controllers
             }
             catch
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, "Not authorized");
+                return StatusCode(StatusCodes.Status401Unauthorized, "An error has occurred while adding a new spaceport.");
             }
         }
 
