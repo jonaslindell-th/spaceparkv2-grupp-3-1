@@ -2,6 +2,6 @@
 {
     public interface IDbFind
     {
-        int VacantParking(double shipLength, SpaceParkDbContext context);
+        int VacantParking(double shipLength, int spacePortId, SpaceParkDbContext context);
     }
 }

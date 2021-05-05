@@ -9,7 +9,7 @@ namespace RestAPI.Data
 {
     public class DbFind : IDbFind
     {
-        public int VacantParking(double shipLength, SpaceParkDbContext context)
+        public int VacantParking(double shipLength, int spacePortId, SpaceParkDbContext context)
         {
             var size = shipLength switch
             {
@@ -20,7 +20,7 @@ namespace RestAPI.Data
             };
 
             //var parkingList = context.Parkings.FirstOrDefault(p => p.Size.Type == size && string.IsNullOrEmpty(p.CharacterName));
-            var parking = context.Parkings.Include("Size").FirstOrDefault(p => p.Size.Type == size && string.IsNullOrEmpty(p.CharacterName));
+            var parking = context.Parkings.Include("Size").FirstOrDefault(p => p.Size.Type == size && string.IsNullOrEmpty(p.CharacterName) && p.SpacePortId == spacePortId);
 
 
             if (parking != null)

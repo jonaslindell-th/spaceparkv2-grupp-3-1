@@ -75,7 +75,7 @@ namespace RestAPI.Controllers
                 //TODO: Tryparse
                 var length = double.Parse(validShip.Result.Length);
 
-                var parkingId = _dbFind.VacantParking(length, _dbContext);
+                var parkingId = _dbFind.VacantParking(length, id, _dbContext);
 
                 if (validPerson.Result && validShip.Result != null)
                 {
