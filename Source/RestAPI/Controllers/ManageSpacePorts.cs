@@ -37,13 +37,6 @@ namespace RestAPI.Controllers
             return Ok(spacePorts);
         }
 
-        // GET api/<ManageSpacePorts>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/<ManageSpacePorts>
         [HttpPost]
         public IActionResult Post([FromBody] string name)
@@ -84,12 +77,6 @@ namespace RestAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status401Unauthorized, "Not authorized");
             }
-        }
-
-        // PUT api/<ManageSpacePorts>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
         }
 
         // DELETE api/<ManageSpacePorts>/5

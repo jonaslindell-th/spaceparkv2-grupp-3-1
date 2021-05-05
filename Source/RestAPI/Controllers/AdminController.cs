@@ -14,35 +14,21 @@ namespace RestAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ManageParkingsController : ControllerBase
+    public class AdminController : ControllerBase
     {
         private SpaceParkDbContext _dbContext;
 
-        public ManageParkingsController(SpaceParkDbContext dbContext)
+        public AdminController(SpaceParkDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        // GET: api/<ManageParkingsController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        // POST api/Admin/AddParking
+        [HttpPost("[action]")]
+        public IActionResult AddParking([FromBody] Parking parking)
         {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<ManageParkingsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<ManageParkingsController>
-        [HttpPost]
-        public IActionResult Post([FromBody] Parking parking)
-        {
-            parking.CharacterName = "";
-            parking.SpaceshipName = "";
+            parking.CharacterName = null;
+            parking.SpaceshipName = null;
             try
             {
                 _dbContext.Parkings.Add(parking);
@@ -55,15 +41,9 @@ namespace RestAPI.Controllers
             }
         }
 
-        // PUT api/<ManageParkingsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<ManageParkingsController>/5
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        // DELETE api/Admin/RemoveParking/5
+        [HttpDelete("[action]/{id}")]
+        public IActionResult RemoveParking(int id)
         {
             var parking = _dbContext.Parkings.FirstOrDefault(p => p.Id == id);
             if (parking != null)
@@ -74,7 +54,7 @@ namespace RestAPI.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status404NotFound, "Parking not found.");
+                return BadRequest($"Parking with id:{id} was not found.");
             }
         }
     }

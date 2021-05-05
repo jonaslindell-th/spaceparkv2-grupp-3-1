@@ -16,13 +16,13 @@ namespace RestAPI.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class SpacePortController : ControllerBase
+    public class ParkingController : ControllerBase
     {
         private SpaceParkDbContext _dbContext;
         private IReceipt _receipt;
         private IDbFind _dbFind;
 
-        public SpacePortController(SpaceParkDbContext dbContext, IReceipt receipt, IDbFind dbFind)
+        public ParkingController(SpaceParkDbContext dbContext, IReceipt receipt, IDbFind dbFind)
         {
             _dbContext = dbContext;
             _receipt = receipt;
@@ -41,12 +41,6 @@ namespace RestAPI.Controllers
         public string Get(int id)
         {
             return "value";
-        }
-
-        // POST api/<SpaceParkController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
         }
 
         // PUT api/<SpaceParkController>/5
