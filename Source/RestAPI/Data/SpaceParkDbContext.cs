@@ -18,6 +18,11 @@ namespace RestAPI.Data
         {
             modelBuilder.Entity<Size>(entity =>
                 entity.HasCheckConstraint("CK_Only_Range_Between_1_and_4", "[Type] >= 1 AND [Type] < 5"));
+
+            modelBuilder.Entity<Receipt>()
+                .HasOne<Size>(r => r.Size)
+                .WithMany(s => s.Receipts)
+                .HasForeignKey(s => s.SizeId);
         }
 
         public DbSet<Parking> Parkings { get; set; }

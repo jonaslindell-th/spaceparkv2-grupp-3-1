@@ -11,7 +11,9 @@ namespace RestAPI.Models
     {
         public int Id { get; set; }
         [Required]
-        public ParkingSize Type { get; set; } 
+        public ParkingSize Type { get; set; }
+
+        public ICollection<Receipt> Receipts { get; set; }
     }
     public enum ParkingSize
     {
