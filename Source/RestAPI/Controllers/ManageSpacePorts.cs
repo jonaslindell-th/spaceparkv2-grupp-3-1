@@ -28,18 +28,18 @@ namespace RestAPI.Controllers
             _parking = parking;
         }
 
-        // GET: api/<ManageSpacePorts>
-        [HttpGet]
-        public IActionResult Get()
+        // GET: api/ManageSpacePorts/GetAllSpacePorts
+        [HttpGet("[action]")]
+        public IActionResult GetAllSpacePorts()
         {
             var spacePorts = _dbContext.SpacePorts.Include("Parkings").ToList();
             
             return Ok(spacePorts);
         }
 
-        // POST api/<ManageSpacePorts>
-        [HttpPost]
-        public IActionResult Post([FromBody] string name)
+        // POST api/ManageSpacePorts/AddSpacePort
+        [HttpPost("[action]")]
+        public IActionResult AddSpacePort([FromBody] string name)
         {
             try
             {
@@ -79,10 +79,20 @@ namespace RestAPI.Controllers
             }
         }
 
-        // DELETE api/<ManageSpacePorts>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // DELETE api/ManageSpacePorts/DeleteSpacePort/5
+        [HttpDelete("[action]/{id}")]
+        public IActionResult DeleteSpacePort(int id)
         {
+            //TODO: Interface för spaceport
+            SpacePort spacePort = _dbContext.SpacePorts.FirstOrDefault(s => s.Id == id);
+            if (spacePort != null)
+            {
+                _dbContext.SpacePorts.Remove(spacePort);
+                _dbContext.SaveChanges();
+                return StatusCode(StatusCodes.Status202Accepted, $"Space port deleted.");
+            }
+
+            return BadRequest("Space port was not found.");
         }
     }
 }
