@@ -28,10 +28,12 @@ namespace RestAPI.Controllers
 
         // GET: api/<ManageSpacePorts>
         [HttpGet]
-        public ICollection<SpacePort> Get()
+        //public ICollection<SpacePort> Get()
+        public IActionResult Get()
         {
             var spacePorts = _dbContext.SpacePorts.Include("Parkings").ToList();
-            return spacePorts;
+            
+            return Ok(spacePorts);
         }
 
         // GET api/<ManageSpacePorts>/5

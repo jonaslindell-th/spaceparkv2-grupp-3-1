@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RestAPI.Data;
+using RestAPI.Middleware;
 using RestAPI.Models;
 
 namespace RestAPI
@@ -55,6 +56,8 @@ namespace RestAPI
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<ApiKeyMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
