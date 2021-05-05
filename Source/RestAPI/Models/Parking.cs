@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RestAPI.Models
 {
-    public class Parking
+    public class Parking : IParking
     {
         public int Id { get; set; }
         public Size Size { get; set; }

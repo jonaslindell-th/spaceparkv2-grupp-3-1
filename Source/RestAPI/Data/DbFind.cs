@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using RestAPI.Models;
 
 namespace RestAPI.Data
 {
@@ -11,13 +13,15 @@ namespace RestAPI.Data
         {
             var size = shipLength switch
             {
-                < 500 => 1,
-                < 1000 => 2,
-                < 10000 => 3,
-                 _ => 4
+                < 500 => ParkingSize.Small,
+                < 1000 => ParkingSize.Medium,
+                < 10000 => ParkingSize.Large,
+                 _ => ParkingSize.VeryLarge
             };
 
-            var parking = context.Parkings.FirstOrDefault(p => p.SizeId == size && string.IsNullOrEmpty(p.CharacterName));
+            //var parkingList = context.Parkings.FirstOrDefault(p => p.Size.Type == size && string.IsNullOrEmpty(p.CharacterName));
+            var parking = context.Parkings.Include("Size").FirstOrDefault(p => p.Size.Type == size && string.IsNullOrEmpty(p.CharacterName));
+
 
             if (parking != null)
             {

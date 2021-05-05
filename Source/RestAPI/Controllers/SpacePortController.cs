@@ -157,8 +157,8 @@ namespace RestAPI.Controllers
 
 
                     foundParking.Arrival = null;
-                    foundParking.CharacterName = "";
-                    foundParking.SpaceshipName = "";
+                    foundParking.CharacterName = null;
+                    foundParking.SpaceshipName = null;
                     _dbContext.SaveChanges();
                     return StatusCode(StatusCodes.Status200OK, $"Vehicle unparked, total cost: {price}.");
                 }

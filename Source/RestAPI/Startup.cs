@@ -34,6 +34,7 @@ namespace RestAPI
             services.AddSingleton<IReceipt, Receipt>(); // Everytime someone request IReceipt service then create an instance of Receipt and inject that instace
             services.AddSingleton<IDbFind, DbFind>();
             services.AddSingleton<ISpacePort, SpacePort>();
+            services.AddSingleton<IParking, Parking>();
             services.AddDbContext<SpaceParkDbContext>(option => option.UseSqlServer(@"Server=localhost,41433;Database=SpaceParkData;User ID=sa; Password=verystrong!pass321"));
             services.AddSwaggerGen(c =>
             {
