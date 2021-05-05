@@ -54,7 +54,7 @@ namespace RestAPI.Controllers
         public IActionResult Park(int id, [FromBody] ParkRequest request)
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-            var parkings = (from sp in _dbContext.SpacePorts
+            var unoccupiedParkings = (from sp in _dbContext.SpacePorts
                 join p in _dbContext.Parkings
                     on sp.Id equals p.SpacePortId
                 where p.SpacePortId == id && p.CharacterName == null
@@ -68,14 +68,14 @@ namespace RestAPI.Controllers
                     SpacePortId = p.SpacePortId
                 }).ToList();
 
-            if (parkings.Count > 0)
+            if (unoccupiedParkings.Count > 0)
             {
                 var validPerson = Validate.Person(request.PersonName);
                 var validShip = Validate.Starship(request.ShipName);
                 //TODO: Tryparse
                 var length = double.Parse(validShip.Result.Length);
 
-                var parkingId = _dbFind.VacantParking(length, id, _dbContext);
+                var parkingId = _dbFind.CorrectSizeParking(length, id, _dbContext);
 
                 if (validPerson.Result && validShip.Result != null)
                 {
@@ -92,15 +92,14 @@ namespace RestAPI.Controllers
                     else
                     {
                         //TODO: Correct status code
-                        return StatusCode(StatusCodes.Status404NotFound, "Parking was not found.");
+                        //return StatusCode(StatusCodes.Status404NotFound, "Parking was not found.");
+                        return BadRequest("No suitable parking was found for your ship length.");
                     }
                 }
-                else
-                {
-                    return StatusCode(StatusCodes.Status401Unauthorized, "Not a valid character or ship");
-                }
+                return StatusCode(StatusCodes.Status401Unauthorized, "Not a valid character or ship");
             }
-            return StatusCode(StatusCodes.Status423Locked, "SpacePort is full");
+            //return StatusCode(StatusCodes.Status423Locked, "SpacePort is full");
+            return BadRequest("Space port is full.");
         }
 
         // PUT api/<SpaceParkController>/5
@@ -133,7 +132,7 @@ namespace RestAPI.Controllers
                     double price = 0;
 
                     //TODO: Switch expression c# 9.0 in new method CalculatePrice()
-                    // Then calculate the minute price of parkingize times the amount of minutes + the starting fee.
+                    // Then calculate the minute price of parking size times the amount of minutes + the starting fee.
                     if (size.Type == ParkingSize.Small)
                     {
                         price = (Math.Round(diff, 0) * 200) + 100;
@@ -162,15 +161,11 @@ namespace RestAPI.Controllers
                     _dbContext.SaveChanges();
                     return StatusCode(StatusCodes.Status200OK, $"Vehicle unparked, total cost: {price}.");
                 }
-                else
-                {
-                    return StatusCode(StatusCodes.Status401Unauthorized, "Incorrect person or ship");
-                }
+                //return StatusCode(StatusCodes.Status401Unauthorized, "Incorrect person or ship");
+                return BadRequest("Incorrect character or ship");
             }
-            else
-            {
-                return StatusCode(StatusCodes.Status404NotFound, "Parking was not found.");
-            }
+            //return StatusCode(StatusCodes.Status404NotFound, "Parking was not found.");
+            return BadRequest($"No parking with id:{id} was found.");
         }
 
         // DELETE api/<SpaceParkController>/5

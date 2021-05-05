@@ -9,7 +9,7 @@ namespace RestAPI.Data
 {
     public class DbFind : IDbFind
     {
-        public int VacantParking(double shipLength, int spacePortId, SpaceParkDbContext context)
+        public int CorrectSizeParking(double shipLength, int spacePortId, SpaceParkDbContext context)
         {
             var size = shipLength switch
             {
