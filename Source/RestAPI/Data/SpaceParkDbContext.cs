@@ -14,6 +14,12 @@ namespace RestAPI.Data
 
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Size>(entity =>
+                entity.HasCheckConstraint("CK_Only_Range_Between_1_and_4", "[Type] >= 1 AND [Type] < 5"));
+        }
+
         public DbSet<Parking> Parkings { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
         public DbSet<Size> Sizes { get; set; }
