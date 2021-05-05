@@ -54,6 +54,13 @@ namespace RestAPI.Controllers
         public IActionResult Park(int id, [FromBody] ParkRequest request)
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
+            var validSpacePort = _dbContext.SpacePorts.FirstOrDefault(sp => sp.Id == id);
+            if (validSpacePort == null)
+            {
+                return BadRequest($"There is no existing spaceport with id:{id}.");
+            }
+
             var unoccupiedParkings = (from sp in _dbContext.SpacePorts
                 join p in _dbContext.Parkings
                     on sp.Id equals p.SpacePortId

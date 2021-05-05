@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestAPI.Data;
 
 namespace RestAPI.Migrations
 {
     [DbContext(typeof(SpaceParkDbContext))]
-    partial class SpaceParkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210505124435_Update_Tables_Size_Is_Now_Mapped")]
+    partial class Update_Tables_Size_Is_Now_Mapped
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

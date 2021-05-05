@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestAPI.Data;
 
 namespace RestAPI.Migrations
 {
     [DbContext(typeof(SpaceParkDbContext))]
-    partial class SpaceParkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210505124147_Update_Tables_To_Require_Input")]
+    partial class Update_Tables_To_Require_Input
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,8 +81,6 @@ namespace RestAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SizeId");
-
                     b.ToTable("Receipts");
                 });
 
@@ -126,17 +126,6 @@ namespace RestAPI.Migrations
                     b.HasOne("RestAPI.Models.SpacePort", null)
                         .WithMany("Parkings")
                         .HasForeignKey("SpacePortId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Size");
-                });
-
-            modelBuilder.Entity("RestAPI.Models.Receipt", b =>
-                {
-                    b.HasOne("RestAPI.Models.Size", "Size")
-                        .WithMany()
-                        .HasForeignKey("SizeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
