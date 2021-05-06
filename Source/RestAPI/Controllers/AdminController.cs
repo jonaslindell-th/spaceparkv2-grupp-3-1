@@ -67,7 +67,7 @@ namespace RestAPI.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllSpacePorts()
         {
-            var spacePorts = _dbContext.SpacePorts.Include("Parkings").ToList();
+            var spacePorts = _dbContext.SpacePorts.Include(sp => sp.Parkings).ThenInclude(p => p.Size).ToList();
 
             return Ok(spacePorts);
         }
