@@ -24,13 +24,15 @@ namespace RestAPI.Controllers
         private IReceipt _receipt;
         private IDbFind _dbFind;
         private ICalculate _calculate;
+        private IDbQueries _dbQueries;
 
-        public UserController(SpaceParkDbContext dbContext, IReceipt receipt, IDbFind dbFind, ICalculate calculate)
+        public UserController(SpaceParkDbContext dbContext, IReceipt receipt, IDbFind dbFind, ICalculate calculate, IDbQueries dbQueries)
         {
             _dbContext = dbContext;
             _receipt = receipt;
             _dbFind = dbFind;
             _calculate = calculate;
+            _dbQueries = dbQueries;
         }
 
         // GET: api/<SpaceParkController>
@@ -111,27 +113,12 @@ namespace RestAPI.Controllers
         public IActionResult Unpark(int id, [FromBody] ParkRequest request)
         {
             var foundParking = _dbContext.Parkings.Include(p => p.Size).FirstOrDefault(p => p.Id == id && request.PersonName.ToLower() == p.CharacterName.ToLower() && request.ShipName.ToLower() == p.SpaceshipName.ToLower());
-
+            
             if (foundParking != null)
-            { 
-                _receipt.Name = foundParking.CharacterName;
-                _receipt.Arrival = (DateTime)foundParking.Arrival;
-                _receipt.StarshipName = foundParking.SpaceshipName;
-                _receipt.Departure = DateTime.Now;
-                _receipt.Size = foundParking.Size;
+            {
+                _dbQueries.CreateReceipt(_receipt, foundParking, _calculate, _dbContext);
 
-                double diff = (_receipt.Departure - _receipt.Arrival).TotalMinutes;
-                var price = _calculate.Price(diff, foundParking.Size.Type);
-
-                _receipt.TotalAmount = price;
-
-                _dbContext.Receipts.Add((Receipt)_receipt);
-
-                foundParking.Arrival = null;
-                foundParking.CharacterName = null;
-                foundParking.SpaceshipName = null;
-                _dbContext.SaveChanges();
-                return StatusCode(StatusCodes.Status200OK, $"Vehicle unparked, total cost: {price}.");
+                return StatusCode(StatusCodes.Status200OK, $"Vehicle unparked.");
             }
             return BadRequest("Incorrect name, ship or parking spot id");
         }

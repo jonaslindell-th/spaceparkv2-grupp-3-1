@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using RestAPI.Controllers;
 using RestAPI.Data;
 using RestAPI.Middleware;
 using RestAPI.Models;
@@ -35,6 +36,7 @@ namespace RestAPI
             services.AddScoped<IReceipt, Receipt>(); // Everytime someone request IReceipt service then create an instance of Receipt and inject that instace
             services.AddSingleton<IDbFind, DbFind>();
             services.AddSingleton<ICalculate, Calculate>();
+            services.AddSingleton<IDbQueries, DbQueries>();
             services.AddScoped<ISpacePort, SpacePort>();
             services.AddScoped<IParking, Parking>();
             services.AddDbContext<SpaceParkDbContext>(option => option.UseSqlServer(@"Server=localhost,41433;Database=SpaceParkData;User ID=sa; Password=verystrong!pass321"));
