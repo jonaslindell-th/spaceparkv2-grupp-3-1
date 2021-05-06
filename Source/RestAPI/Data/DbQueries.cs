@@ -50,7 +50,7 @@ namespace RestAPI.Controllers
             return unoccupiedParkings;
         }
 
-        public int CorrectSizeParking(double shipLength, int spacePortId, SpaceParkDbContext context)
+        public int CorrectSizeParking(double shipLength, int spacePortId, SpaceParkDbContext dbContext)
         {
             var size = shipLength switch
             {
@@ -60,8 +60,8 @@ namespace RestAPI.Controllers
                 _ => ParkingSize.VeryLarge
             };
 
-            //var parkingList = context.Parkings.FirstOrDefault(p => p.Size.Type == size && string.IsNullOrEmpty(p.CharacterName));
-            var parking = context.Parkings.Include("Size").FirstOrDefault(p => p.Size.Type == size && string.IsNullOrEmpty(p.CharacterName) && p.SpacePortId == spacePortId);
+            //var parkingList = dbContext.Parkings.FirstOrDefault(p => p.Size.Type == size && string.IsNullOrEmpty(p.CharacterName));
+            var parking = dbContext.Parkings.Include("Size").FirstOrDefault(p => p.Size.Type == size && string.IsNullOrEmpty(p.CharacterName) && p.SpacePortId == spacePortId);
 
 
             if (parking != null)
@@ -70,6 +70,23 @@ namespace RestAPI.Controllers
             }
 
             return 0;
+        }
+
+        public bool ParkVehicle(int parkingId, SpaceParkDbContext dbContext, string name, string shipName)
+        {
+            var foundParking = dbContext.Parkings.FirstOrDefault(p => p.Id == parkingId);
+            try
+            {
+                foundParking.Arrival = DateTime.Now;
+                foundParking.CharacterName = name;
+                foundParking.SpaceshipName = shipName;
+                dbContext.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

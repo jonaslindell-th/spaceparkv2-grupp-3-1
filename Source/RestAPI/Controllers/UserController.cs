@@ -51,7 +51,7 @@ namespace RestAPI.Controllers
             return Ok(activeParkings);
         }
 
-        // PUT api/<SpaceParkController>/5
+        // PUT api/User/Park/5
         [HttpPut("[action]/{id}")]
         public IActionResult Park(int id, [FromBody] ParkRequest request)
         {
@@ -76,14 +76,10 @@ namespace RestAPI.Controllers
 
                 if (validPerson.Result && validShip.Result != null)
                 {
-                    //TODO: In Vacant parking?
-                    var foundParking = _dbContext.Parkings.FirstOrDefault(p => p.Id == parkingId);
-                    if (foundParking != null)
+                    bool parked = _dbQueries.ParkVehicle(parkingId, _dbContext, request.PersonName, request.ShipName);
+
+                    if (parked)
                     {
-                        foundParking.Arrival = DateTime.Now;
-                        foundParking.CharacterName = request.PersonName;
-                        foundParking.SpaceshipName = request.ShipName;
-                        _dbContext.SaveChanges();
                         return StatusCode(StatusCodes.Status200OK, "Vehicle parked.");
                     }
                     return BadRequest("No suitable parking was found for your ship length.");
@@ -93,7 +89,7 @@ namespace RestAPI.Controllers
             return BadRequest("Space port is full.");
         }
 
-        // PUT api/<SpaceParkController>/5
+        // PUT api/User/Unpark/5
         [HttpPut("[action]/{id}")]
         public IActionResult Unpark(int id, [FromBody] ParkRequest request)
         {
