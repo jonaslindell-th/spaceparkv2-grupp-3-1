@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -116,26 +117,14 @@ namespace RestAPI.Controllers
                 _receipt.Size = foundParking.Size;
 
                 double diff = (_receipt.Departure - _receipt.Arrival).TotalMinutes;
-                double price = 0;
 
-                //TODO: Switch expression c# 9.0 in new method CalculatePrice()
-                // Then calculate the minute price of parking size times the amount of minutes + the starting fee.
-                if (foundParking.Size.Type == ParkingSize.Small)
+                var price = foundParking.Size.Type switch
                 {
-                    price = (Math.Round(diff, 0) * 200) + 100;
-                }
-                else if (foundParking.Size.Type == ParkingSize.Medium)
-                {
-                    price = (Math.Round(diff, 0) * 800) + 400;
-                }
-                else if (foundParking.Size.Type == ParkingSize.Large)
-                {
-                    price = (Math.Round(diff, 0) * 1800) + 900;
-                }
-                else
-                {
-                    price = (Math.Round(diff, 0) * 12000) + 6000;
-                }
+                    ParkingSize.Small => (Math.Round(diff, 0) * 200) + 100,
+                    ParkingSize.Medium => (Math.Round(diff, 0) * 800) + 400,
+                    ParkingSize.Large => (Math.Round(diff, 0) * 1800) + 900,
+                    _ => (Math.Round(diff, 0) * 12000) + 6000
+                };
 
                 _receipt.TotalAmount = price;
 
