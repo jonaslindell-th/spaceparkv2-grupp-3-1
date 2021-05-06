@@ -7,7 +7,7 @@ namespace RestAPI.Controllers
 {
     public class DbQueries : IDbQueries
     {
-        public void CreateReceipt(IReceipt receipt, Parking foundParking, ICalculate calculate, SpaceParkDbContext dbContext)
+        public void CreateReceipt(IReceipt receipt, IParking foundParking, ICalculate calculate, SpaceParkDbContext dbContext)
         {
             receipt.Name = foundParking.CharacterName;
             receipt.Arrival = (DateTime)foundParking.Arrival;

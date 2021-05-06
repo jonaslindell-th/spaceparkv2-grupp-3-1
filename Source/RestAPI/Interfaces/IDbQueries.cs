@@ -6,6 +6,6 @@ namespace RestAPI.Controllers
 {
     public interface IDbQueries
     {
-        void CreateReceipt(IReceipt receipt, Parking foundParking, ICalculate calculate, SpaceParkDbContext dbContext);
+        void CreateReceipt(IReceipt receipt, IParking foundParking, ICalculate calculate, SpaceParkDbContext dbContext);
     }
 }

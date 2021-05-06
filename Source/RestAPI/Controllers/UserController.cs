@@ -112,7 +112,7 @@ namespace RestAPI.Controllers
         [HttpPut("[action]/{id}")]
         public IActionResult Unpark(int id, [FromBody] ParkRequest request)
         {
-            var foundParking = _dbContext.Parkings.Include(p => p.Size).FirstOrDefault(p => p.Id == id && request.PersonName.ToLower() == p.CharacterName.ToLower() && request.ShipName.ToLower() == p.SpaceshipName.ToLower());
+            IParking foundParking = _dbContext.Parkings.Include(p => p.Size).FirstOrDefault(p => p.Id == id && request.PersonName.ToLower() == p.CharacterName.ToLower() && request.ShipName.ToLower() == p.SpaceshipName.ToLower());
             
             if (foundParking != null)
             {
