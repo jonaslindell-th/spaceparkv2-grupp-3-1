@@ -16,13 +16,13 @@ namespace RestAPI.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class ParkingController : ControllerBase
+    public class UserController : ControllerBase
     {
         private SpaceParkDbContext _dbContext;
         private IReceipt _receipt;
         private IDbFind _dbFind;
 
-        public ParkingController(SpaceParkDbContext dbContext, IReceipt receipt, IDbFind dbFind)
+        public UserController(SpaceParkDbContext dbContext, IReceipt receipt, IDbFind dbFind)
         {
             _dbContext = dbContext;
             _receipt = receipt;
@@ -30,17 +30,21 @@ namespace RestAPI.Controllers
         }
 
         // GET: api/<SpaceParkController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("[action]")]
+        public IActionResult ParkingHistory([FromBody] string name)
         {
-            return new string[] { "value1", "value2" };
+            var receipts = _dbContext.Receipts.Where(r => r.Name.ToLower() == name.ToLower()).ToList();
+
+            return Ok(receipts);
         }
 
         // GET api/<SpaceParkController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("[action]")]
+        public IActionResult ActiveParkings([FromBody] string name)
         {
-            return "value";
+            var activeParkings = _dbContext.Parkings.Where(p => p.CharacterName.ToLower() == name.ToLower()).ToList();
+
+            return Ok(activeParkings);
         }
 
         // PUT api/<SpaceParkController>/5
@@ -110,7 +114,7 @@ namespace RestAPI.Controllers
             var foundParking = _dbContext.Parkings.FirstOrDefault(p => p.Id == id);
             if (foundParking != null)
             {
-                if (foundParking.CharacterName == request.PersonName && foundParking.SpaceshipName == request.ShipName)
+                if (foundParking.CharacterName.ToLower() == request.PersonName.ToLower() && foundParking.SpaceshipName.ToLower() == request.ShipName.ToLower())
                 {
                     _receipt.Name = foundParking.CharacterName;
                     _receipt.Arrival = (DateTime) foundParking.Arrival;
@@ -167,12 +171,6 @@ namespace RestAPI.Controllers
             }
             //return StatusCode(StatusCodes.Status404NotFound, "Parking was not found.");
             return BadRequest($"No parking with id:{id} was found.");
-        }
-
-        // DELETE api/<SpaceParkController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
