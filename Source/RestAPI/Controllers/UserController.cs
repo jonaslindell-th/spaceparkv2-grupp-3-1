@@ -65,19 +65,7 @@ namespace RestAPI.Controllers
                 return BadRequest($"There is no existing spaceport with id:{id}.");
             }
 
-            var unoccupiedParkings = (from sp in _dbContext.SpacePorts
-                                      join p in _dbContext.Parkings
-                                          on sp.Id equals p.SpacePortId
-                                      where p.SpacePortId == id && p.CharacterName == null
-                                      select new Parking()
-                                      {
-                                          Id = p.Id,
-                                          SizeId = p.SizeId,
-                                          CharacterName = p.CharacterName,
-                                          SpaceshipName = p.SpaceshipName,
-                                          Arrival = p.Arrival,
-                                          SpacePortId = p.SpacePortId
-                                      }).ToList();
+            var unoccupiedParkings = _dbQueries.FindUnoccupiedParkings(_dbContext, id);
 
             if (unoccupiedParkings.Count > 0)
             {

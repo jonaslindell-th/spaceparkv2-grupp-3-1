@@ -1,7 +1,9 @@
 ﻿using RestAPI.Models;
 using RestAPI.ParkingLogic;
 using System;
+using System.Collections.Generic;
 using RestAPI.Data;
+using System.Linq;
 
 namespace RestAPI.Controllers
 {
@@ -26,6 +28,25 @@ namespace RestAPI.Controllers
             foundParking.CharacterName = null;
             foundParking.SpaceshipName = null;
             dbContext.SaveChanges();
+        }
+
+        public ICollection<Parking> FindUnoccupiedParkings(SpaceParkDbContext dbContext, int id)
+        {
+            var unoccupiedParkings = (from sp in dbContext.SpacePorts
+                join p in dbContext.Parkings
+                    on sp.Id equals p.SpacePortId
+                where p.SpacePortId == id && p.CharacterName == null
+                select new Parking()
+                {
+                    Id = p.Id,
+                    SizeId = p.SizeId,
+                    CharacterName = p.CharacterName,
+                    SpaceshipName = p.SpaceshipName,
+                    Arrival = p.Arrival,
+                    SpacePortId = p.SpacePortId
+                }).ToList();
+
+            return unoccupiedParkings;
         }
     }
 }
