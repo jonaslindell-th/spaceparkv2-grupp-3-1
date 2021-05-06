@@ -69,7 +69,6 @@ namespace RestAPI.Controllers
             {
                 var validPerson = Validate.Person(request.PersonName);
                 var validShip = Validate.Starship(request.ShipName);
-                //TODO: Tryparse
                 var length = double.Parse(validShip.Result.Length);
 
                 var parkingId = _dbQueries.CorrectSizeParking(length, id, _dbContext);
