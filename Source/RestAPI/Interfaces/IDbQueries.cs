@@ -9,5 +9,6 @@ namespace RestAPI.Controllers
     {
         void CreateReceipt(IReceipt receipt, IParking foundParking, ICalculate calculate, SpaceParkDbContext dbContext);
         ICollection<Parking> FindUnoccupiedParkings(SpaceParkDbContext dbContext, int id);
+        int CorrectSizeParking(double shipLength, int spacePortId, SpaceParkDbContext context);
     }
 }

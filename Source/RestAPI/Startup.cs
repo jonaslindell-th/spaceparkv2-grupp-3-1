@@ -34,7 +34,6 @@ namespace RestAPI
         {
             services.AddControllers();
             services.AddScoped<IReceipt, Receipt>(); // Everytime someone request IReceipt service then create an instance of Receipt and inject that instace
-            services.AddSingleton<IDbFind, DbFind>();
             services.AddSingleton<ICalculate, Calculate>();
             services.AddSingleton<IDbQueries, DbQueries>();
             services.AddScoped<ISpacePort, SpacePort>();

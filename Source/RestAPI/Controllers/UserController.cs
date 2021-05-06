@@ -22,15 +22,13 @@ namespace RestAPI.Controllers
     {
         private SpaceParkDbContext _dbContext;
         private IReceipt _receipt;
-        private IDbFind _dbFind;
         private ICalculate _calculate;
         private IDbQueries _dbQueries;
 
-        public UserController(SpaceParkDbContext dbContext, IReceipt receipt, IDbFind dbFind, ICalculate calculate, IDbQueries dbQueries)
+        public UserController(SpaceParkDbContext dbContext, IReceipt receipt, ICalculate calculate, IDbQueries dbQueries)
         {
             _dbContext = dbContext;
             _receipt = receipt;
-            _dbFind = dbFind;
             _calculate = calculate;
             _dbQueries = dbQueries;
         }
@@ -74,7 +72,7 @@ namespace RestAPI.Controllers
                 //TODO: Tryparse
                 var length = double.Parse(validShip.Result.Length);
 
-                var parkingId = _dbFind.CorrectSizeParking(length, id, _dbContext);
+                var parkingId = _dbQueries.CorrectSizeParking(length, id, _dbContext);
 
                 if (validPerson.Result && validShip.Result != null)
                 {
@@ -92,7 +90,6 @@ namespace RestAPI.Controllers
                 }
                 return StatusCode(StatusCodes.Status401Unauthorized, "Not a valid character or ship");
             }
-            //return StatusCode(StatusCodes.Status423Locked, "SpacePort is full");
             return BadRequest("Space port is full.");
         }
 
