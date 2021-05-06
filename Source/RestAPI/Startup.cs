@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using RestAPI.Data;
 using RestAPI.Middleware;
 using RestAPI.Models;
+using RestAPI.ParkingLogic;
 
 namespace RestAPI
 {
@@ -33,6 +34,7 @@ namespace RestAPI
             services.AddControllers();
             services.AddScoped<IReceipt, Receipt>(); // Everytime someone request IReceipt service then create an instance of Receipt and inject that instace
             services.AddSingleton<IDbFind, DbFind>();
+            services.AddSingleton<ICalculate, Calculate>();
             services.AddScoped<ISpacePort, SpacePort>();
             services.AddScoped<IParking, Parking>();
             services.AddDbContext<SpaceParkDbContext>(option => option.UseSqlServer(@"Server=localhost,41433;Database=SpaceParkData;User ID=sa; Password=verystrong!pass321"));

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using RestAPI.Data;
 using RestAPI.Models;
+using RestAPI.ParkingLogic;
 using RestAPI.Requests;
 using RestAPI.Swapi;
 
@@ -22,12 +23,14 @@ namespace RestAPI.Controllers
         private SpaceParkDbContext _dbContext;
         private IReceipt _receipt;
         private IDbFind _dbFind;
+        private ICalculate _calculate;
 
-        public UserController(SpaceParkDbContext dbContext, IReceipt receipt, IDbFind dbFind)
+        public UserController(SpaceParkDbContext dbContext, IReceipt receipt, IDbFind dbFind, ICalculate calculate)
         {
             _dbContext = dbContext;
             _receipt = receipt;
             _dbFind = dbFind;
+            _calculate = calculate;
         }
 
         // GET: api/<SpaceParkController>
@@ -43,7 +46,7 @@ namespace RestAPI.Controllers
         [HttpGet("[action]")]
         public IActionResult ActiveParkings([FromBody] string name)
         {
-            var activeParkings = _dbContext.SpacePorts.Include(s => s.Parkings.Where(p => p.CharacterName.ToLower() == name.ToLower()));
+            var activeParkings = _dbContext.Parkings.Where(p => p.CharacterName.ToLower() == name.ToLower()).ToList();
 
             return Ok(activeParkings);
         }
@@ -108,8 +111,9 @@ namespace RestAPI.Controllers
         public IActionResult Unpark(int id, [FromBody] ParkRequest request)
         {
             var foundParking = _dbContext.Parkings.Include(p => p.Size).FirstOrDefault(p => p.Id == id && request.PersonName.ToLower() == p.CharacterName.ToLower() && request.ShipName.ToLower() == p.SpaceshipName.ToLower());
+
             if (foundParking != null)
-            {
+            { 
                 _receipt.Name = foundParking.CharacterName;
                 _receipt.Arrival = (DateTime)foundParking.Arrival;
                 _receipt.StarshipName = foundParking.SpaceshipName;
@@ -117,19 +121,11 @@ namespace RestAPI.Controllers
                 _receipt.Size = foundParking.Size;
 
                 double diff = (_receipt.Departure - _receipt.Arrival).TotalMinutes;
-
-                var price = foundParking.Size.Type switch
-                {
-                    ParkingSize.Small => (Math.Round(diff, 0) * 200) + 100,
-                    ParkingSize.Medium => (Math.Round(diff, 0) * 800) + 400,
-                    ParkingSize.Large => (Math.Round(diff, 0) * 1800) + 900,
-                    _ => (Math.Round(diff, 0) * 12000) + 6000
-                };
+                var price = _calculate.Price(diff, foundParking.Size.Type);
 
                 _receipt.TotalAmount = price;
 
                 _dbContext.Receipts.Add((Receipt)_receipt);
-
 
                 foundParking.Arrival = null;
                 foundParking.CharacterName = null;
