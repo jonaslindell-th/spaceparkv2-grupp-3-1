@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using RestAPI.Data;
 using RestAPI.Models;
 using RestAPI.Requests;
@@ -42,7 +43,7 @@ namespace RestAPI.Controllers
         [HttpGet("[action]")]
         public IActionResult ActiveParkings([FromBody] string name)
         {
-            var activeParkings = _dbContext.Parkings.Where(p => p.CharacterName.ToLower() == name.ToLower()).ToList();
+            var activeParkings = _dbContext.SpacePorts.Include(s => s.Parkings.Where(p => p.CharacterName.ToLower() == name.ToLower()));
 
             return Ok(activeParkings);
         }
