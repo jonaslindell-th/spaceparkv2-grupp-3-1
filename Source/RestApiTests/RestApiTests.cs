@@ -15,7 +15,7 @@ using Xunit;
 
 namespace RestApiTests
 {
-    public class UnitTest1
+    public class RestApiTests
     {
         private ISpacePort _spacePort = new SpacePort();
         private IParking _parking = new Parking();
@@ -361,6 +361,36 @@ namespace RestApiTests
 
             //Assert
             Assert.Equal(expectedPrice, price);
+        }
+
+        [Theory]
+        [InlineData(2)]
+        [InlineData(4)]
+        public void Get_All_Space_Ports_Expect_(int numberOfPorts)
+        {
+            //Arrange
+            DbContextOptions<SpaceParkDbContext> options = new DbContextOptionsBuilder<SpaceParkDbContext>().Options;
+            var moqContext = new Mock<SpaceParkDbContext>(options);
+            var adminController = new AdminController(moqContext.Object, _spacePort, _parking);
+            // SpaceParkDbContext dbContext, ISpacePort spacePort, IParking parking
+            IList<SpacePort> spacePorts = new List<SpacePort>();
+
+            for (int i = 1; i < numberOfPorts + 1; i++)
+            {
+                spacePorts.Add(new SpacePort()
+                {
+                    Id = i,
+                    Name = "Newport"
+                });
+            }
+
+            moqContext.Setup(sp => sp.SpacePorts).ReturnsDbSet(spacePorts);
+
+            //Act
+            var response = adminController.GetAllSpacePorts() as OkObjectResult;
+            var spacePortList = response.Value as List<SpacePort>;
+            //Assert
+            Assert.Equal(numberOfPorts, spacePortList.Count);
         }
     }
 }

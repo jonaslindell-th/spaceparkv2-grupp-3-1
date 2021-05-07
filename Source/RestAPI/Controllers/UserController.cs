@@ -51,8 +51,8 @@ namespace RestAPI.Controllers
             return Ok(activeParkings);
         }
 
-        // PUT api/User/Park/5
-        [HttpPut("[action]/{id}")]
+        // PUT api/User/Park/AtSpacePort/5
+        [HttpPut("[action]/AtSpacePort/{id}")]
         public IActionResult Park(int id, [FromBody] ParkRequest request)
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
