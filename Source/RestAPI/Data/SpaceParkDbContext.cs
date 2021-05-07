@@ -25,9 +25,9 @@ namespace RestAPI.Data
                 .HasForeignKey(s => s.SizeId);
         }
 
-        public DbSet<Parking> Parkings { get; set; }
-        public DbSet<Receipt> Receipts { get; set; }
-        public DbSet<Size> Sizes { get; set; }
-        public DbSet<SpacePort> SpacePorts { get; set; }
+        public virtual DbSet<Parking> Parkings { get; set; }
+        public virtual DbSet<Receipt> Receipts { get; set; }
+        public virtual DbSet<Size> Sizes { get; set; }
+        public virtual DbSet<SpacePort> SpacePorts { get; set; }
     }
 }

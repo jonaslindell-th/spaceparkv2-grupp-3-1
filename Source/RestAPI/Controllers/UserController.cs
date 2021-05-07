@@ -69,7 +69,12 @@ namespace RestAPI.Controllers
             {
                 var validPerson = Validate.Person(request.PersonName);
                 var validShip = Validate.Starship(request.ShipName);
-                var length = double.Parse(validShip.Result.Length);
+                double length = 0;
+
+                if (validShip.Result != null)
+                {
+                    length = double.Parse(validShip.Result.Length);
+                }
 
                 var parkingId = _dbQueries.CorrectSizeParking(length, id, _dbContext);
 
@@ -79,7 +84,7 @@ namespace RestAPI.Controllers
 
                     if (parked)
                     {
-                        return StatusCode(StatusCodes.Status200OK, "Vehicle parked.");
+                        return Ok("Vehicle parked.");
                     }
                     return BadRequest("No suitable parking was found for your ship length.");
                 }
