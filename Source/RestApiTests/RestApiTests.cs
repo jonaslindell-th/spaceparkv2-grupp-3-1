@@ -366,7 +366,7 @@ namespace RestApiTests
         [Theory]
         [InlineData(2)]
         [InlineData(4)]
-        public void Get_All_Space_Ports_Expect_(int numberOfPorts)
+        public void Get_All_Space_Ports_Expect_X_Amount_Of_Space_Ports(int numberOfPorts)
         {
             //Arrange
             DbContextOptions<SpaceParkDbContext> options = new DbContextOptionsBuilder<SpaceParkDbContext>().Options;
