@@ -52,20 +52,18 @@ namespace RestApiTests
                 Type = ParkingSize.Small
             };
 
-            for (int i = 0; i < 5; i++)
+
+            Parking parking = new Parking()
             {
-                Parking parking = new Parking()
-                {
-                    Id = i,
-                    Size = size,
-                    SizeId = 1,
-                    SpacePortId = 1,
-                    CharacterName = null,
-                    SpaceshipName = null,
-                    Arrival = null
-                };
-                parkings.Add(parking);
-            }
+                Id = 1,
+                Size = size,
+                SizeId = 1,
+                SpacePortId = 1,
+                CharacterName = null,
+                SpaceshipName = null,
+                Arrival = null
+            };
+            parkings.Add(parking);
             spacePorts[0].Parkings = parkings;
 
             moqContext.Setup(x => x.Sizes).ReturnsDbSet(sizes);
@@ -107,26 +105,23 @@ namespace RestApiTests
                 Type = ParkingSize.Small
             };
 
-            for (int i = 0; i < 5; i++)
+            Parking parking = new Parking()
             {
-                Parking parking = new Parking()
-                {
-                    Id = i,
-                    Size = size,
-                    SizeId = 1,
-                    SpacePortId = 1,
-                    CharacterName = null,
-                    SpaceshipName = null,
-                    Arrival = null
-                };
-                parkings.Add(parking);
-            }
+                Id = 1,
+                Size = size,
+                SizeId = 1,
+                SpacePortId = 1,
+                CharacterName = null,
+                SpaceshipName = null,
+                Arrival = null
+            };
+            parkings.Add(parking);
+
             spacePorts[0].Parkings = parkings;
 
             moqContext.Setup(x => x.Sizes).ReturnsDbSet(sizes);
             moqContext.Setup(x => x.Parkings).ReturnsDbSet(parkings);
             moqContext.Setup(sp => sp.SpacePorts).ReturnsDbSet(spacePorts);
-
 
             //Act
             userController.Park(spacePorts[0].Id, request);
@@ -163,20 +158,18 @@ namespace RestApiTests
                 Type = ParkingSize.Small
             };
 
-            for (int i = 0; i < 5; i++)
+
+            Parking parking = new Parking()
             {
-                Parking parking = new Parking()
-                {
-                    Id = i,
-                    Size = size,
-                    SizeId = 1,
-                    SpacePortId = 1,
-                    CharacterName = null,
-                    SpaceshipName = null,
-                    Arrival = null
-                };
-                parkings.Add(parking);
-            }
+                Id = 1,
+                Size = size,
+                SizeId = 1,
+                SpacePortId = 1,
+                CharacterName = null,
+                SpaceshipName = null,
+                Arrival = null
+            };
+            parkings.Add(parking);
             spacePorts[0].Parkings = parkings;
 
             moqContext.Setup(x => x.Sizes).ReturnsDbSet(sizes);
@@ -195,17 +188,17 @@ namespace RestApiTests
         [Theory]
         [InlineData("Luke Skywalker", 5)]
         [InlineData("Darth vader", 8)]
+        [InlineData("Yoda", 2)]
         public void Park_Valid_Starwars_Character_And_Ship_Then_Get_Active_Parkings_Expect_Found(string name, int expected)
         {
             //Arrange
             DbContextOptions<SpaceParkDbContext> options = new DbContextOptionsBuilder<SpaceParkDbContext>().Options;
             var moqContext = new Mock<SpaceParkDbContext>(options);
             var userController = new UserController(moqContext.Object, _receipt, _calculate, _dbQueries);
-            IList<SpacePort> spacePorts = new List<SpacePort>() {new SpacePort() {Id = 1, Name = "Hilux"}};
+            IList<SpacePort> spacePorts = new List<SpacePort>() { new SpacePort() { Id = 1, Name = "Hilux" } };
             IList<Parking> parkings = new List<Parking>();
             IList<Size> sizes = new List<Size>();
             spacePorts[0].Parkings = new List<Parking>();
-
 
             ParkRequest request = new ParkRequest();
             request.PersonName = name;
@@ -217,7 +210,7 @@ namespace RestApiTests
                 Type = ParkingSize.Small
             };
 
-            for (int i = 0; i < expected; i++)
+            for (int i = 1; i < expected + 1; i++)
             {
                 Parking parking = new Parking()
                 {
