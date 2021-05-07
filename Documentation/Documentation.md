@@ -70,9 +70,9 @@ Vi har inte valt att dela upp arbetet mellan oss, där en person tar en del och 
 
 Vi började med att läsa igenom och diskutera uppgiften. Därefter började vi spåna på lite tankar hur vi skulle påbörja processen, och det vi började med var att ta fram ER diagram samt databas diagram, och precis som alltid så var vi båda överens om att det vi i början tar fram enbart är en grov skiss över det hela, och kan komma att ändras under projektet. Med det sagt fick vi till underlag som höll genom hela projektet. 
 
-(BILD)
+![first](img/1.png)
 
-(BILD)
+![second](img/2.png)
 
 <a name="dcompose"/>
 
@@ -126,7 +126,7 @@ Den delen vi tyckte var krångligast att få till med hela RestAPI:et var att l�
 Ett problem som vi stötte på längst vägen var ett error som uppstod när vi unparkade. 
 När vi gör en unpark så kallar vi på en metod för att räkna ut det totala priset baserat på tidpunkt för park samt unpark och därefter skapa ett kvitto. Problemet som uppstod var att den försökte skapa upp ett kvitto med ett ID i databasen som redan existerar alltså gick det endast att göra en unpark, och därefter fick vi följande error 
 
-(BILD)
+![third](img/3.png)
 
 Detta fel uppstod eftersom vi använde oss av AddSingleton för injicering av dependency. 
 ```csharp
