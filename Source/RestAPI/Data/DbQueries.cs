@@ -61,7 +61,7 @@ namespace RestAPI.Controllers
             };
 
             //var parkingList = dbContext.Parkings.FirstOrDefault(p => p.Size.Type == size && string.IsNullOrEmpty(p.CharacterName));
-            var parking = dbContext.Parkings.Include("Size").FirstOrDefault(p => p.Size.Type == size && string.IsNullOrEmpty(p.CharacterName) && p.SpacePortId == spacePortId);
+            var parking = dbContext.Parkings.Include("Size").FirstOrDefault(p => p.Size.Type == size && p.CharacterName == null && p.SpacePortId == spacePortId);
 
 
             if (parking != null)

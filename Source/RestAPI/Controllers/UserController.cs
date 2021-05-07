@@ -71,14 +71,16 @@ namespace RestAPI.Controllers
                 var validShip = Validate.Starship(request.ShipName);
                 double length = 0;
 
-                if (validShip.Result != null)
+                if (validPerson.Result == false || validShip.Result == null)
                 {
-                    length = double.Parse(validShip.Result.Length);
+                    return Unauthorized("Invalid character or ship.");
                 }
+
+                length = double.Parse(validShip.Result.Length);
 
                 var parkingId = _dbQueries.CorrectSizeParking(length, id, _dbContext);
 
-                if (validPerson.Result && validShip.Result != null)
+                if (parkingId != 0)
                 {
                     bool parked = _dbQueries.ParkVehicle(parkingId, _dbContext, request.PersonName, request.ShipName);
 
@@ -86,9 +88,10 @@ namespace RestAPI.Controllers
                     {
                         return Ok("Vehicle parked.");
                     }
-                    return BadRequest("No suitable parking was found for your ship length.");
+                    return BadRequest("Failed to park vehicle");
                 }
-                return StatusCode(StatusCodes.Status401Unauthorized, "Not a valid character or ship");
+
+                return BadRequest("No suitable parkings for your ship length.");
             }
             return BadRequest("Space port is full.");
         }

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -6,6 +7,7 @@ using RestAPI.Data;
 using RestAPI.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Moq.EntityFrameworkCore;
 using RestAPI.ParkingLogic;
 using RestAPI.Requests;
@@ -191,14 +193,15 @@ namespace RestApiTests
         }
 
         [Theory]
-        [InlineData("Luke Skywalker")]
-        public void Park_Valid_Starwars_Character_And_Ship_Then_Get_Active_Parkings_Expect_Found(string name)
+        [InlineData("Luke Skywalker", 5)]
+        [InlineData("Darth vader", 8)]
+        public void Park_Valid_Starwars_Character_And_Ship_Then_Get_Active_Parkings_Expect_Found(string name, int expected)
         {
             //Arrange
             DbContextOptions<SpaceParkDbContext> options = new DbContextOptionsBuilder<SpaceParkDbContext>().Options;
             var moqContext = new Mock<SpaceParkDbContext>(options);
             var userController = new UserController(moqContext.Object, _receipt, _calculate, _dbQueries);
-            IList<SpacePort> spacePorts = new List<SpacePort>() { new SpacePort() { Id = 1, Name = "Hilux" } };
+            IList<SpacePort> spacePorts = new List<SpacePort>() {new SpacePort() {Id = 1, Name = "Hilux"}};
             IList<Parking> parkings = new List<Parking>();
             IList<Size> sizes = new List<Size>();
             spacePorts[0].Parkings = new List<Parking>();
@@ -214,7 +217,7 @@ namespace RestApiTests
                 Type = ParkingSize.Small
             };
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < expected; i++)
             {
                 Parking parking = new Parking()
                 {
@@ -222,12 +225,13 @@ namespace RestApiTests
                     Size = size,
                     SizeId = 1,
                     SpacePortId = 1,
-                    CharacterName = null,
-                    SpaceshipName = null,
-                    Arrival = null
+                    CharacterName = name,
+                    SpaceshipName = "X-Wing",
+                    Arrival = DateTime.Now
                 };
                 parkings.Add(parking);
             }
+
             spacePorts[0].Parkings = parkings;
 
             moqContext.Setup(x => x.Sizes).ReturnsDbSet(sizes);
@@ -236,11 +240,11 @@ namespace RestApiTests
 
 
             //Act
-            userController.Park(spacePorts[0].Id, request);
-            //var response = userController.ActiveParkings()
+            var okObjectResult = userController.ActiveParkings(request.PersonName) as OkObjectResult;
+            var model = okObjectResult.Value as List<Parking>;
 
             //Assert
-            //Assert.Equal(foundParking.CharacterName, request.PersonName);
+            Assert.Equal(model.Count, expected);
         }
     }
 }
