@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using RestAPI.Data;
 using RestAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using RestAPI.Requests;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -30,10 +31,17 @@ namespace RestAPI.Controllers
 
         // POST api/Admin/AddParking
         [HttpPost("[action]")]
-        public IActionResult AddParking([FromBody] Parking parking)
+        public IActionResult AddParking([FromBody] AddParkingRequest request)
         {
-            parking.CharacterName = null;
-            parking.SpaceshipName = null;
+            var parking = new Parking()
+            {
+                SizeId = request.SizeId,
+                SpacePortId = request.SpacePortId,
+                CharacterName = null,
+                SpaceshipName = null,
+                Arrival = null
+            };
+
             try
             {
                 _dbContext.Parkings.Add(parking);
