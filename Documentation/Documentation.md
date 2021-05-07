@@ -12,6 +12,7 @@
 * [Api dokumentation](#apidocs)
   * [Endpoint user](#endpointuser)
   * [Endpoint admin](#endpointadmin)
+* [Publicerad dokumentation](#published)  
 
 <a name="pre"/>
 
@@ -635,3 +636,9 @@ Example Request
 ```200 OK``` - ```Parking with id:27 was removed successfully.```  
 ```400 Bad Request``` - ```Parking with id:1 was not found.```
 </details>
+
+<a name="published"/>
+
+### Publicerad dokumentation
+
+Dokumentationen finns även publicerad [här](https://documenter.getpostman.com/view/15582637/TzRPjpe3) och går där att öppna direkt i postman.
