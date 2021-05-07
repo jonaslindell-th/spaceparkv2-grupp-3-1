@@ -340,59 +340,27 @@ namespace RestApiTests
 
             //Assert
             Assert.Equal(onlyParking.CharacterName == null, expected);
-        }        
-        
-        //TODO: Check why receipts wont be added to mockdbcontext receipts
+        }
+
         [Theory]
-        [InlineData("Luke Skywalker", "X-Wing", 1, true)]
-        public void Unpark_With_Correct_Parking_Id_And_Character_And_Ship_Name_Expect_Null_In_Parking_Name_And_Ship_Properties(string name, string shipName, int parkingId, bool expected)
+        [InlineData(0, ParkingSize.Small, 100)]
+        [InlineData(0, ParkingSize.Medium, 400)]
+        [InlineData(0, ParkingSize.Large, 900)]
+        [InlineData(0, ParkingSize.VeryLarge, 6000)]
+        [InlineData(1, ParkingSize.Small, 300)]
+        [InlineData(1, ParkingSize.Medium, 1200)]
+        [InlineData(1, ParkingSize.Large, 2700)]
+        [InlineData(1, ParkingSize.VeryLarge, 18000)]
+        public void Calculate_Price_When_X_Amount_Of_Minutes_Passed_And_Parking_Size_Equals_Y(double minutes, ParkingSize size, double expectedPrice)
         {
             //Arrange
-            DbContextOptions<SpaceParkDbContext> options = new DbContextOptionsBuilder<SpaceParkDbContext>().Options;
-            var moqContext = new Mock<SpaceParkDbContext>(options);
-            var userController = new UserController(moqContext.Object, _receipt, _calculate, _dbQueries);
-            IList<SpacePort> spacePorts = new List<SpacePort>() { new SpacePort() { Id = 1, Name = "Hilux" } };
-            IList<Parking> parkings = new List<Parking>();
-            IList<Size> sizes = new List<Size>();
-            IList<Receipt> receipts = new List<Receipt>();
-            spacePorts[0].Parkings = new List<Parking>();
-
-
-            ParkRequest request = new ParkRequest();
-            request.PersonName = name;
-            request.ShipName = shipName;
-
-            Size size = new Size()
-            {
-                Id = 1,
-                Type = ParkingSize.Small
-            };
-            sizes.Add(size);
-
-            Parking parking = new Parking()
-            {
-                Id = 1,
-                Size = size,
-                SizeId = 1,
-                SpacePortId = 1,
-                CharacterName = name,
-                SpaceshipName = shipName,
-                Arrival = DateTime.Now.AddHours(-2)
-            };
-            parkings.Add(parking);
-            spacePorts[0].Parkings = parkings;
-
-            moqContext.Setup(x => x.Sizes).ReturnsDbSet(sizes);
-            moqContext.Setup(x => x.Parkings).ReturnsDbSet(parkings);
-            moqContext.Setup(sp => sp.SpacePorts).ReturnsDbSet(spacePorts);
-            moqContext.Setup(sp => sp.Receipts).ReturnsDbSet(receipts);
+            Calculate calculate = new Calculate();
 
             //Act
-            userController.Unpark(parkingId, request);
-            var response = userController.ParkingHistory(request.PersonName);
+            var price = calculate.Price(minutes, size);
 
             //Assert
-            //Assert.Equal(receipt.Name == name, expected);
+            Assert.Equal(expectedPrice, price);
         }
     }
 }
