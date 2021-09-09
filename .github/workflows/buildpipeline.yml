@@ -4,6 +4,8 @@ jobs:
   build:
     name: Verify build
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./Source/RestAPI
 
     steps:
       - uses: actions/checkout@v2
@@ -11,4 +13,3 @@ jobs:
         with:
           dotnet-version: "5.0.x"
       - run: dotnet build
-        path: ./Source/RestAPI
