@@ -5,7 +5,7 @@ jobs:
     name: Verify build
     runs-on: ubuntu-latest
     env:
-      working-directory: ./Source/SpacePark.sln
+      working-directory: ./Source
 
     steps:
       - uses: actions/checkout@v2
@@ -13,3 +13,4 @@ jobs:
         with:
           dotnet-version: "5.0.x"
       - run: dotnet build
+      working-directory: ${{env.working-directory}}
