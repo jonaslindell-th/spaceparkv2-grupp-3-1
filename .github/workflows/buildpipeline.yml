@@ -10,4 +10,5 @@ jobs:
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: "5.0.x"
+      - working-directory: /Source/RestAPI
       - run: dotnet build
