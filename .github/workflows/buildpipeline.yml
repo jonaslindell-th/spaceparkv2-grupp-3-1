@@ -4,11 +4,13 @@ jobs:
   build:
     name: Verify build
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./Source/RestAPI
 
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: "5.0.x"
-      - working-directory: /Source/RestAPI
+      - working-directory: ${{env.working-directory}}
       - run: dotnet build
