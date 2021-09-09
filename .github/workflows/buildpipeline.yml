@@ -2,7 +2,7 @@ name: workflow demonstration
 on: [push]
 jobs:
   build:
-    name: Verify build
+    name: Verify build and run tests
     runs-on: ubuntu-latest
 
     steps:
