@@ -11,3 +11,4 @@ jobs:
         with:
           dotnet-version: "5.0.x"
       - run: dotnet build ./Source/SpacePark.sln
+      - run: dotnet test ./Source/RestApiTests
