@@ -5,7 +5,7 @@ jobs:
     name: Verify build
     runs-on: ubuntu-latest
     env:
-      working-directory: ./Source
+      working-directory: ./Source/SpacePark.sln
 
     steps:
       - uses: actions/checkout@v2
